@@ -49,6 +49,7 @@ aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
 
 # 对于 META_DIR（可多个，空格分隔），则使用 cp 命令附加额外的参数 META_EXTRA
 if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
+  echo ""
   echo "META_DIR=${META_DIR}"
 
   # META_DIR_ARR=($META_DIR)
@@ -57,11 +58,11 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
   echo "META_DIR_ARR=[${META_DIR_ARR[@]}]"
 
   for dir in "${META_DIR_ARR[@]}"; do
+    echo "edit metadata: s3://${AWS_S3_BUCKET}/${dir}"
     aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
       --profile s3-sync-action \
       --no-progress \
       --recursive ${META_EXTRA} \
-      ${ENDPOINT_APPEND} \
       $*
   done
 fi
