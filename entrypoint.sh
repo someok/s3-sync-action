@@ -48,7 +48,9 @@ sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
 if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
   echo "META_DIR=${META_DIR}"
 
-  META_DIR_ARR=($META_DIR)
+  # META_DIR_ARR=($META_DIR)
+  IFS=', ' read -r -a META_DIR_ARR <<<"$META_DIR"
+
   echo "META_DIR_ARR=[${META_DIR_ARR[@]}]"
 
   for dir in "${META_DIR_ARR[@]}"; do
