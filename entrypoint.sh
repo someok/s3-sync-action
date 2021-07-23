@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
+
+sh --version
+bash --version
 
 if [ -z "$AWS_S3_BUCKET" ]; then
   echo "AWS_S3_BUCKET is not set. Quitting."
