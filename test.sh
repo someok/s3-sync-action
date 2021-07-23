@@ -9,7 +9,9 @@ set -e
 # 只要一个子命令失败，整个管道命令就失败，脚本就会终止执行。
 set -o pipefail
 
-META_DIR="proxy-conf/surge proxy-conf/clash"
+AWS_S3_BUCKET=demo
+
+META_DIR="proxy-conf/surge/* proxy-conf/clash"
 META_EXTRA="--content-type 'text/plain; charset=utf-8'"
 
 if [[ -z "$META_DIR" && -z "$META_EXTRA" ]]; then
@@ -18,12 +20,13 @@ fi
 
 if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
 
-    echo ${META_DIR}
-    META_DIR_ARR=(${META_DIR})
-    echo ${META_DIR_ARR[@]}
+    echo "META_DIR=${META_DIR}"
+    # META_DIR_ARR=(${META_DIR})
+    IFS=', ' read -r -a META_DIR_ARR <<<"$META_DIR"
+
+    echo "META_DIR_ARR=[${META_DIR_ARR[@]}]"
+
     for dir in "${META_DIR_ARR[@]}"; do
-        # echo ">$i<"
-        echo "${i}"
         echo "aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
               --profile s3-sync-action \
               --no-progress \
