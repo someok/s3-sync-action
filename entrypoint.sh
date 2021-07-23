@@ -30,7 +30,7 @@ fi
 # Create a dedicated profile for this action to avoid conflicts
 # with past/future actions.
 # https://github.com/jakejarvis/s3-sync-action/issues/1
-aws configure --profile s3-sync-action <<-EOF > /dev/null 2>&1
+aws configure --profile s3-sync-action <<-EOF >/dev/null 2>&1
 ${AWS_ACCESS_KEY_ID}
 ${AWS_SECRET_ACCESS_KEY}
 ${AWS_REGION}
@@ -44,11 +44,29 @@ sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --no-progress \
               ${ENDPOINT_APPEND} $*"
 
+# 对于 META_DIR（可多个，空格分隔），则使用 cp 命令附加额外的参数 META_EXTRA
+# if [[ -z "$META_DIR" && -z "$META_EXTRA" ]]; then
+#   echo 'none'
+# fi
+
+if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
+
+  META_DIR_ARR=(${META_DIR})
+  for dir in "${META_DIR_ARR[@]}"; do
+    sh -c "aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
+              --profile s3-sync-action \
+              --no-progress \
+              --recursive ${META_EXTRA}
+              ${ENDPOINT_APPEND} $*"
+
+  done
+fi
+
 # Clear out credentials after we're done.
 # We need to re-run `aws configure` with bogus input instead of
 # deleting ~/.aws in case there are other credentials living there.
 # https://forums.aws.amazon.com/thread.jspa?threadID=148833
-aws configure --profile s3-sync-action <<-EOF > /dev/null 2>&1
+aws configure --profile s3-sync-action <<-EOF >/dev/null 2>&1
 null
 null
 null
