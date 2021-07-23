@@ -59,6 +59,12 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
 
   for dir in "${META_DIR_ARR[@]}"; do
     echo "edit metadata: s3://${AWS_S3_BUCKET}/${dir}"
+    echo "aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
+      --profile s3-sync-action \
+      --no-progress \
+      --recursive ${META_EXTRA} \
+      --metadata-directive REPLACE \
+      $*"
     aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
       --profile s3-sync-action \
       --no-progress \
