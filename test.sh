@@ -22,7 +22,8 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
 
     echo "META_DIR=${META_DIR}"
     # META_DIR_ARR=(${META_DIR})
-    IFS=', ' read -r -a META_DIR_ARR <<<"$META_DIR"
+    META_DIR_ARR=($(echo ${META_DIR} | tr ' ' ' '))
+    # IFS=', ' read -r -a META_DIR_ARR <<<"$META_DIR"
 
     echo "META_DIR_ARR=[${META_DIR_ARR[@]}]"
 

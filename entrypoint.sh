@@ -44,7 +44,7 @@ EOF
 
 # Sync using our dedicated profile and suppress verbose messages.
 # All other flags are optional via the `args:` directive.
-bash -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
+sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
   --profile s3-sync-action \
   --no-progress \
   ${ENDPOINT_APPEND} \
@@ -56,7 +56,8 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
   echo "META_DIR=${META_DIR}"
 
   # META_DIR_ARR=($META_DIR)
-  IFS=', ' read -r -a META_DIR_ARR <<<"$META_DIR"
+  # IFS=', ' read -r -a META_DIR_ARR <<<"$META_DIR"
+  META_DIR_ARR=($(echo ${META_DIR} | tr ' ' ' '))
 
   echo "META_DIR_ARR=[${META_DIR_ARR[@]}]"
 
@@ -68,7 +69,7 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
       --recursive ${META_EXTRA} \
       --metadata-directive REPLACE \
       $*"
-    bash -c "aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
+    sh -c "aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
       --profile s3-sync-action \
       --no-progress \
       --recursive ${META_EXTRA} \
