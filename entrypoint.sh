@@ -27,7 +27,7 @@ if [ -n "$AWS_S3_ENDPOINT" ]; then
   ENDPOINT_APPEND="--endpoint-url $AWS_S3_ENDPOINT"
 fi
 
-aws -V
+aws --version
 
 # Create a dedicated profile for this action to avoid conflicts
 # with past/future actions.
