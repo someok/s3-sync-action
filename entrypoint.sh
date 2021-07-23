@@ -63,8 +63,8 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
       --profile s3-sync-action \
       --no-progress \
       --recursive ${META_EXTRA} \
-      --metadata-directive REPLACE
-    $*
+      --metadata-directive REPLACE \
+      $*
   done
 fi
 
