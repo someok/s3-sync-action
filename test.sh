@@ -9,7 +9,7 @@ set -e
 # 只要一个子命令失败，整个管道命令就失败，脚本就会终止执行。
 set -o pipefail
 
-META_DIR="a b  c"
+META_DIR="proxy-conf/surge proxy-conf/clash"
 META_EXTRA="--content-type 'text/plain; charset=utf-8'"
 
 if [[ -z "$META_DIR" && -z "$META_EXTRA" ]]; then
