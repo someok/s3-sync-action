@@ -1,4 +1,4 @@
-FROM someok/aws-cli-v2:v2
+FROM someok/aws-cli-v2:latest
 
 COPY entrypoint.sh /entrypoint.sh
 
