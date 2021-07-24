@@ -2,8 +2,6 @@
 
 set -e
 
-echo "$(bash --version)"
-
 if [ -z "$AWS_S3_BUCKET" ]; then
   echo "AWS_S3_BUCKET is not set. Quitting."
   exit 1
@@ -43,7 +41,12 @@ EOF
 
 # Sync using our dedicated profile and suppress verbose messages.
 # All other flags are optional via the `args:` directive.
-bash -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
+echo "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
+  --profile s3-sync-action \
+  --no-progress \
+  ${ENDPOINT_APPEND} \
+  $*"
+sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
   --profile s3-sync-action \
   --no-progress \
   ${ENDPOINT_APPEND} \
@@ -66,14 +69,14 @@ if [[ -n "$META_DIR" && -n "$META_EXTRA" ]]; then
       --profile s3-sync-action \
       --no-progress \
       --recursive ${META_EXTRA} \
-      --metadata-directive REPLACE \
-      $*"
-    bash -c "aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
+      --metadata-directive REPLACE"
+
+    aws s3 cp s3://${AWS_S3_BUCKET}/${dir} s3://${AWS_S3_BUCKET}/${dir} \
       --profile s3-sync-action \
       --no-progress \
-      --recursive ${META_EXTRA} \
-      --metadata-directive REPLACE \
-      $*"
+      --recursive \
+      ${META_EXTRA} \
+      --metadata-directive REPLACE
   done
 fi
 
