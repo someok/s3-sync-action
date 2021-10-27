@@ -4,9 +4,9 @@ This simple action uses the [vanilla AWS CLI](https://docs.aws.amazon.com/cli/in
 
 基于 [jakejarvis/s3-sync-action](https://github.com/jakejarvis/s3-sync-action) 修改，在其原有基础上做了如下调整：
 
-[X] 使用 `aws cli v2`
-[X] 增加一个用于编译 `aws cli v2` 的 docker 文件 `Dockerfile-awscli-v2`
-[X] 入口文件增加属性 `META_DIR`、 `META_EXTRA` 用于使用 `aws cli cp` 做额外的元数据调整，例如在部分文件夹下的文件上添加 `content-type`
+- [X] 使用 `aws cli v2`
+- [X] 增加一个用于编译 `aws cli v2` 的 docker 文件 `Dockerfile-awscli-v2`
+- [X] 入口文件增加属性 `META_DIR`、 `META_EXTRA` 用于使用 `aws cli cp` 做额外的元数据调整，例如在部分文件夹下的文件上添加 `content-type`
 
 ## Usage
 
